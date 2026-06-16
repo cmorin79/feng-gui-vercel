@@ -1,0 +1,9 @@
+{
+  "name": "feng-gui-vercel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless proxy that hosts images and calls the Feng-GUI ImageAttention API for NeuroMap reports.",
+  "engines": {
+    "node": ">=18"
+  }
+}
