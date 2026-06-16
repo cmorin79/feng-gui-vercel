@@ -14,8 +14,8 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  const token = process.env.FENGGUI_TOKEN;
-  if (!token) {
+  const apikey = process.env.FENGGUI_TOKEN;
+  if (!apikey) {
     return res.status(500).json({
       error:
         "Server is missing FENGGUI_TOKEN. Set it in Vercel → Project → Settings → Environment Variables, then redeploy.",
@@ -45,13 +45,14 @@ export default async function handler(req, res) {
     ViewDistance: String(ViewDistance),
     AnalysisOptions: String(AnalysisOptions),
     OutputOptions: String(OutputOptions),
-    token,
   });
 
   const apiUrl = `https://service.feng-gui.com/json/api.ashx/ImageAttention?${params.toString()}`;
 
   try {
-    const r = await fetch(apiUrl);
+    // Current Feng-GUI API authenticates with the key in the X-API-Key header
+    // (or an ?apikey= query param). The old ?token= param is no longer valid.
+    const r = await fetch(apiUrl, { headers: { "X-API-Key": apikey } });
     const text = await r.text();
     let data;
     try {
